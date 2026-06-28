@@ -448,7 +448,31 @@ nav {
   gap: 24px;
   align-items: start;
 }
-@media (max-width: 700px) { .memo-wrap { grid-template-columns: 1fr; } }
+@media (max-width: 700px) {
+  .memo-wrap { grid-template-columns: 1fr; }
+  .memo-sidebar { position: static; }
+
+  .nav-inner { gap: 12px; }
+  .nav-links { gap: 2px; }
+  .nav-links a { padding: 6px 10px; font-size: 0.82rem; }
+  .nav-logo { font-size: 1rem; }
+
+  .hero { padding: 48px 16px 40px; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero-symbol { font-size: 3rem; }
+
+  .cards-grid { padding: 0 16px 60px; }
+  .page-header { padding: 28px 16px 16px; }
+  .tabs { padding: 0 16px; flex-wrap: wrap; }
+  .search-bar { padding: 0 16px; }
+  .item-list { padding: 0 16px 48px; grid-template-columns: 1fr; }
+
+  .modal { padding: 20px 16px; }
+  .modal h2 { font-size: 1.2rem; }
+
+  .quiz-wrap { padding: 0 16px 48px; }
+  .memo-wrap { padding: 0 16px 48px; }
+}
 .memo-sidebar {
   background: var(--bg-card);
   border: 1px solid var(--border);
