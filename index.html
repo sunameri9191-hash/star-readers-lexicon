@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>星読み辞典</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -11,9 +14,8 @@
 
   <nav>
     <div class="nav-inner">
-      <a class="nav-logo" href="index.html">⭐ <span>星読み</span>辞典</a>
+      <a class="nav-logo" href="index.html">星読み辞典</a>
       <div class="nav-links">
-        <a href="index.html">ホーム</a>
         <a href="dictionary.html">辞典</a>
         <a href="quiz.html">クイズ</a>
         <a href="memo.html">メモ</a>
@@ -22,29 +24,35 @@
   </nav>
 
   <main>
-    <div class="hero">
-      <span class="hero-symbol">✨</span>
-      <h1>星読み辞典</h1>
-      <p>天体・ハウス・アスペクトの意味を調べ、学び、自分の言葉でメモしよう</p>
-    </div>
+    <section class="hero">
+      <div class="hero-image-wrap">
+        <img src="./hero.png" alt="星読み辞典" class="hero-img">
+      </div>
+      <div class="hero-text">
+        <span class="hero-eyebrow">Star Readers Lexicon</span>
+        <h1>星読み辞典</h1>
+        <p>天体・ハウス・アスペクトの意味を調べ、<br>学び、自分の言葉でメモしよう。</p>
+        <a href="dictionary.html" class="hero-cta">辞典をひらく</a>
+      </div>
+    </section>
 
-    <div class="cards-grid">
-      <a class="card" href="dictionary.html">
-        <span class="card-icon">📖</span>
+    <section class="features">
+      <a class="feature-card" href="dictionary.html">
+        <span class="feature-icon">📖</span>
         <h2>辞典</h2>
         <p>惑星・ハウス・アスペクトを検索。キーワード・意味・読み方のコツを詳しく確認できる。</p>
       </a>
-      <a class="card" href="quiz.html">
-        <span class="card-icon">🧪</span>
+      <a class="feature-card" href="quiz.html">
+        <span class="feature-icon">🧪</span>
         <h2>クイズ</h2>
-        <p>データから自動生成される4択クイズで星読みの知識を試そう。カテゴリを選んで10問チャレンジ！</p>
+        <p>データから自動生成される4択クイズで星読みの知識を試そう。カテゴリを選んで10問チャレンジ。</p>
       </a>
-      <a class="card" href="memo.html">
-        <span class="card-icon">📝</span>
+      <a class="feature-card" href="memo.html">
+        <span class="feature-icon">📝</span>
         <h2>メモ</h2>
         <p>天体・ハウス・アスペクトごとに自分の解釈やメモを保存。ブラウザに永続保存される。</p>
       </a>
-    </div>
+    </section>
   </main>
 
   <div class="modal-overlay" id="modal-overlay">
