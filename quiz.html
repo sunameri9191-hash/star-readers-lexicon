@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クイズ — 星読み辞典</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="stars-bg" id="stars-bg"></div>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">⭐ <span>星読み</span>辞典</a>
+      <div class="nav-links">
+        <a href="index.html">ホーム</a>
+        <a href="dictionary.html">辞典</a>
+        <a href="quiz.html">クイズ</a>
+        <a href="memo.html">メモ</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>🧪 クイズ</h1>
+      <p>JSONデータから自動生成される4択クイズ。10問チャレンジ！</p>
+    </div>
+
+    <div class="quiz-wrap">
+      <div class="quiz-settings">
+        <h2>カテゴリを選んでスタート</h2>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="cat-planet" checked> 🪐 惑星</label>
+          <label><input type="checkbox" id="cat-house" checked> 🏠 ハウス</label>
+          <label><input type="checkbox" id="cat-aspect"> 📐 アスペクト</label>
+        </div>
+        <button class="btn-primary" id="quiz-start">スタート →</button>
+      </div>
+
+      <div id="quiz-card" style="display:none"></div>
+      <div id="quiz-result" style="display:none" class="quiz-result"></div>
+    </div>
+  </main>
+
+  <script src="./js/app.js"></script>
+  <script>initQuiz();</script>
+</body>
+</html>
