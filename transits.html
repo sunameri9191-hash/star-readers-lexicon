@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トランジット — 星読み辞典</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    .transit-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .transit-sidebar {
+      position: sticky;
+      top: 84px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .sidebar-label {
+      padding: 12px 18px;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+    }
+    .planet-btn-list { display: flex; flex-direction: column; }
+    .planet-btn {
+      padding: 11px 18px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .planet-btn:last-child { border-bottom: none; }
+    .planet-btn:hover { background: rgba(155,114,232,0.06); color: var(--text); }
+    .planet-btn.active { background: rgba(155,114,232,0.15); color: var(--text); border-left: 2px solid var(--accent); }
+    .planet-btn .sym { font-size: 1rem; width: 20px; text-align: center; }
+
+    .mode-toggle {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .mode-btn.active { background: rgba(155,114,232,0.2); color: var(--text); }
+
+    .transit-main {}
+    .transit-mode-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
+    .transit-mode-title strong { color: var(--accent2); font-weight: 400; }
+
+    /* ネイタル天体×アスペクトモード */
+    .natal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .natal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .natal-card-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid transparent;
+    }
+    .natal-card-header:hover { background: rgba(155,114,232,0.05); }
+    .natal-card.open .natal-card-header { border-bottom-color: var(--border); }
+    .natal-sym { font-size: 1.4rem; width: 32px; text-align: center; }
+    .natal-name { font-size: 0.95rem; font-weight: 500; flex: 1; }
+    .natal-arrow { color: var(--text-faint); font-size: 0.8rem; transition: transform 0.2s; }
+    .natal-card.open .natal-arrow { transform: rotate(180deg); }
+    .aspects-list {
+      display: none;
+      padding: 20px 24px;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .natal-card.open .aspects-list { display: flex; }
+    .aspect-item {}
+    .aspect-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .aspect-sym {
+      font-size: 1.1rem;
+      width: 28px;
+      text-align: center;
+    }
+    .aspect-name {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .aspect-deg { font-size: 0.78rem; color: var(--text-muted); }
+    .aspect-nature-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: auto;
+    }
+    .aspect-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      padding-left: 38px;
+    }
+    .aspect-item + .aspect-item { border-top: 1px solid var(--border); padding-top: 20px; }
+
+    /* ハウスモード */
+    .house-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .house-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .house-card-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .house-num {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .house-name { font-size: 0.82rem; color: var(--text-muted); }
+    .house-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.9; }
+
+    .no-data {
+      padding: 60px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 800px) {
+      .transit-layout { grid-template-columns: 1fr; padding: 0 20px 60px; }
+      .transit-sidebar { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars-bg" id="stars-bg"></div>
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">星読み辞典</a>
+      <div class="nav-links">
+        <a href="dictionary.html">辞典</a>
+        <a href="transits.html" class="active">トランジット</a>
+        <a href="quiz.html">クイズ</a>
+        <a href="memo.html">メモ</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>トランジット読み</h1>
+      <p>通過天体がネイタル天体・ハウスと形成するアスペクトの解釈</p>
+    </div>
+
+    <div class="transit-layout">
+      <aside class="transit-sidebar">
+        <div class="mode-toggle">
+          <button class="mode-btn active" id="btn-aspect-mode" onclick="setMode('aspect')">天体×アスペクト</button>
+          <button class="mode-btn" id="btn-house-mode" onclick="setMode('house')">ハウス入室</button>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-label">通過天体を選ぶ</div>
+          <div class="planet-btn-list" id="planet-btn-list"></div>
+        </div>
+      </aside>
+
+      <section class="transit-main">
+        <p class="transit-mode-title" id="mode-title"></p>
+        <div id="transit-content"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="./js/app.js"></script>
+  <script>
+    const PLANET_LABELS = {
+      sun:        { name: '太陽', sym: '☉' },
+      moon:       { name: '月',   sym: '☽' },
+      mercury:    { name: '水星', sym: '☿' },
+      venus:      { name: '金星', sym: '♀' },
+      mars:       { name: '火星', sym: '♂' },
+      jupiter:    { name: '木星', sym: '♃' },
+      saturn:     { name: '土星', sym: '♄' },
+      uranus:     { name: '天王星', sym: '♅' },
+      neptune:    { name: '海王星', sym: '♆' },
+      pluto:      { name: '冥王星', sym: '♇' },
+      chiron:     { name: 'キロン', sym: '⚷' },
+      north_node: { name: 'ノース・ノード', sym: '☊' },
+      south_node: { name: 'サウス・ノード', sym: '☋' },
+    };
+    const HOUSE_NAMES = ['','1ハウス（アセンダント）','2ハウス','3ハウス','4ハウス（IC）','5ハウス','6ハウス','7ハウス（ディセンダント）','8ハウス','9ハウス','10ハウス（MC）','11ハウス','12ハウス'];
+    const ASPECT_NATURE_CLASS = { soft: 'tag-soft', hard: 'tag-hard', neutral: 'badge-transpersonal' };
+    const ASPECT_NATURE_LABEL = { soft: '調和', hard: '緊張', neutral: '融合' };
+
+    let transitData = null;
+    let currentPlanet = 'moon';
+    let currentMode = 'aspect';
+
+    fetch('./data/transits.json')
+      .then(r => r.json())
+      .then(data => {
+        transitData = data;
+        buildPlanetButtons(data.meta.transit_planets);
+        render();
+      });
+
+    function buildPlanetButtons(planets) {
+      const list = document.getElementById('planet-btn-list');
+      list.innerHTML = planets.map(p => {
+        const l = PLANET_LABELS[p] || { name: p, sym: '★' };
+        return `<button class="planet-btn${p === currentPlanet ? ' active' : ''}" onclick="selectPlanet('${p}')">
+          <span class="sym">${l.sym}</span>${l.name}
+        </button>`;
+      }).join('');
+    }
+
+    function selectPlanet(p) {
+      currentPlanet = p;
+      document.querySelectorAll('.planet-btn').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      render();
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btn-aspect-mode').classList.toggle('active', mode === 'aspect');
+      document.getElementById('btn-house-mode').classList.toggle('active', mode === 'house');
+      render();
+    }
+
+    function render() {
+      if (!transitData) return;
+      const pl = PLANET_LABELS[currentPlanet] || { name: currentPlanet, sym: '★' };
+      const title = document.getElementById('mode-title');
+      const content = document.getElementById('transit-content');
+
+      if (currentMode === 'aspect') {
+        title.innerHTML = `トランジット <strong>${pl.sym} ${pl.name}</strong> × ネイタル天体`;
+        const items = transitData.transit_to_natal.filter(r => r.transit_planet === currentPlanet);
+        if (!items.length) {
+          content.innerHTML = `<div class="no-data">この天体のデータはまだ準備中です。順次追加していきます。</div>`;
+          return;
+        }
+        content.innerHTML = `<div class="natal-grid">${items.map(item => renderNatalCard(item)).join('')}</div>`;
+      } else {
+        title.innerHTML = `トランジット <strong>${pl.sym} ${pl.name}</strong> × ネイタルハウス入室`;
+        const items = transitData.transit_to_house.filter(r => r.transit_planet === currentPlanet);
+        if (!items.length) {
+          content.innerHTML = `<div class="no-data">この天体のデータはまだ準備中です。順次追加していきます。</div>`;
+          return;
+        }
+        content.innerHTML = `<div class="house-grid">${items.map(item => renderHouseCard(item)).join('')}</div>`;
+      }
+    }
+
+    function renderNatalCard(item) {
+      if (!transitData) return '';
+      const np = PLANET_LABELS[item.natal_point] || { name: item.natal_point, sym: '★' };
+      const aspects = transitData.meta.aspects;
+      const aspectsHtml = aspects.map(a => {
+        const text = item.aspects[String(a.deg)];
+        if (!text) return '';
+        const nc = ASPECT_NATURE_CLASS[a.nature] || '';
+        const nl = ASPECT_NATURE_LABEL[a.nature] || '';
+        return `<div class="aspect-item">
+          <div class="aspect-header">
+            <span class="aspect-sym">${a.symbol}</span>
+            <span class="aspect-name">${a.name}</span>
+            <span class="aspect-deg">${a.deg}°</span>
+            <span class="aspect-nature-badge ${nc}">${nl}</span>
+          </div>
+          <p class="aspect-text">${text}</p>
+        </div>`;
+      }).join('');
+      return `<div class="natal-card" id="nc-${item.natal_point}">
+        <div class="natal-card-header" onclick="toggleCard('nc-${item.natal_point}')">
+          <span class="natal-sym">${np.sym}</span>
+          <span class="natal-name">ネイタル ${np.name}</span>
+          <span class="natal-arrow">▼</span>
+        </div>
+        <div class="aspects-list">${aspectsHtml}</div>
+      </div>`;
+    }
+
+    function renderHouseCard(item) {
+      const h = item.house;
+      return `<div class="house-card">
+        <div class="house-card-header">
+          <span class="house-num">${h}H</span>
+          <span class="house-name">${HOUSE_NAMES[h] || ''}</span>
+        </div>
+        <p class="house-text">${item.interpretation}</p>
+      </div>`;
+    }
+
+    function toggleCard(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
